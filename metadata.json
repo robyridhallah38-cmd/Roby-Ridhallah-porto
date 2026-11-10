@@ -1,0 +1,6 @@
+{
+  "name": "Roby Rizqy Ridhallah - Dave the Diver Portfolio",
+  "description": "Portfolio bertema Dave the Diver untuk Roby Rizqy Ridhallah - 3D Artist, Graphic Designer, & Creative Explorer. Menampilkan karya 3D Blender, desain grafis Bancho Sushi, dan feed foto Cooksta.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

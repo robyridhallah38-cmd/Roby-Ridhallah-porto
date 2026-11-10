@@ -1,0 +1,462 @@
+import React, { useState } from 'react';
+import { X, Copy, Check, ExternalLink, Code2 } from 'lucide-react';
+import { sound } from '../utils/soundEffects';
+
+interface GoogleSitesModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const GoogleSitesModal: React.FC<GoogleSitesModalProps> = ({ isOpen, onClose }) => {
+  const [copied, setCopied] = useState(false);
+
+  if (!isOpen) return null;
+
+  // Kode HTML lengkap yang siap disalin dan ditempel ke Google Sites (Embed Code)
+  const embedCode = `<!-- ========================================================
+     PORTOFOLIO DAVE THE DIVER - ROBY RIZQY RIDHALLAH
+     Siap ditempel langsung ke Google Sites:
+     Buka Google Sites -> Sisipkan -> Sematkan -> Tab "Sematkan Kode" -> Tempel
+     ======================================================== -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roby Rizqy Ridhallah - Dave the Diver Portfolio</title>
+  
+  <!-- Google Fonts: Pixel Retro & Sans Modern -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #051329;
+      color: #e2f1ff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    .font-pixel {
+      font-family: 'Press Start 2P', monospace;
+    }
+    .font-vt {
+      font-family: 'VT323', monospace;
+    }
+    
+    /* Pixel Button & Box */
+    .pixel-box-cyan {
+      border: 3px solid #00e5ff;
+      box-shadow: 4px 4px 0 #031525;
+    }
+    .pixel-box-gold {
+      border: 3px solid #f59e0b;
+      box-shadow: 4px 4px 0 #031525;
+    }
+    .pixel-btn {
+      box-shadow: 3px 3px 0 #000;
+      cursor: pointer;
+      border: 2px solid #000;
+      transition: transform 0.1s;
+    }
+    .pixel-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 #000;
+    }
+    
+    /* Animasi Gelembung Air */
+    @keyframes bubbleRise {
+      0% { transform: translateY(105vh) scale(0.6); opacity: 0; }
+      20% { opacity: 0.8; }
+      80% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
+    }
+    .bubble {
+      position: fixed;
+      bottom: -20px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(0,229,255,0.3) 60%, rgba(0,163,255,0.1) 100%);
+      border-radius: 50%;
+      pointer-events: none;
+      border: 1px solid rgba(255,255,255,0.6);
+      animation: bubbleRise linear infinite;
+      z-index: 0;
+    }
+    
+    /* Layout */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 10;
+    }
+    
+    /* HUD Header */
+    .hud-bar {
+      background: #030d1d;
+      border-bottom: 2px solid #00e5ff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 11px;
+    }
+    .hud-stat {
+      color: #00e5ff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hud-gold {
+      background: #1a2310;
+      border: 1px solid #f59e0b;
+      padding: 3px 8px;
+      color: #f59e0b;
+    }
+    
+    /* Hero */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-top: 30px;
+      align-items: center;
+    }
+    @media (min-width: 768px) {
+      .hero-grid {
+        grid-template-columns: 320px 1fr;
+      }
+    }
+    
+    .profile-frame {
+      border: 4px solid #00e5ff;
+      padding: 10px;
+      background: #0a1e36;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,229,255,0.3);
+    }
+    .profile-img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      object-position: top;
+      background: linear-gradient(to bottom, #103159, #041226);
+      border: 2px solid #1e4a7a;
+    }
+    
+    /* Tabs */
+    .tabs-wrapper {
+      display: flex;
+      gap: 10px;
+      margin: 30px 0 20px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 12px 20px;
+      background: #061426;
+      border: 2px solid #183a60;
+      color: #8ec8f8;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #0e2a52;
+      border-color: #00e5ff;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(0,229,255,0.4);
+    }
+    
+    /* Cards */
+    .porto-card {
+      background: #081a33;
+      border: 3px solid #1c3a63;
+      margin-bottom: 25px;
+      padding: 20px;
+      box-shadow: 4px 4px 0 #000;
+    }
+    .card-img-wrap {
+      width: 100%;
+      background: #000;
+      border: 2px solid #00e5ff;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+    .card-img-wrap img {
+      width: 100%;
+      max-height: 480px;
+      object-fit: contain;
+      display: block;
+    }
+    
+    /* Footer */
+    .footer-box {
+      background: #040c17;
+      border-top: 4px solid #f59e0b;
+      margin-top: 40px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .contact-btn {
+      display: inline-block;
+      padding: 12px 25px;
+      background: #f59e0b;
+      color: #051329;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Animated Bubbles -->
+  <div class="bubble" style="left: 10%; width: 20px; height: 20px; animation-duration: 8s;"></div>
+  <div class="bubble" style="left: 25%; width: 14px; height: 14px; animation-duration: 12s; animation-delay: 2s;"></div>
+  <div class="bubble" style="left: 45%; width: 28px; height: 28px; animation-duration: 10s; animation-delay: 1s;"></div>
+  <div class="bubble" style="left: 70%; width: 18px; height: 18px; animation-duration: 9s; animation-delay: 3s;"></div>
+  <div class="bubble" style="left: 88%; width: 24px; height: 24px; animation-duration: 11s; animation-delay: 0.5s;"></div>
+
+  <!-- Game HUD Bar -->
+  <div class="hud-bar font-pixel">
+    <div class="hud-stat">
+      <span>🤿 DIVER: <strong>ROBY RIZQY</strong></span>
+      <span style="color:#f59e0b; margin-left: 8px;">LV.99 S-CLASS</span>
+      <span style="color:#8ec8f8; margin-left: 8px;">| O2: 100%</span>
+    </div>
+    <div class="hud-gold">🪙 99,990G (COOKSTA 5★)</div>
+  </div>
+
+  <div class="container">
+    <!-- Hero Section -->
+    <div class="hero-grid">
+      <!-- Foto Profil Roby -->
+      <div class="profile-frame">
+        <img 
+          src="https://ais-pre-xv3rjpaayjuphh4nqgbnhs-863584476271.asia-east1.run.app/assets/aistudio/Gambar_WhatsApp_2025-02-16_pukul_14.19.36_4757f056-removebg-preview_0d08c160.png" 
+          alt="Roby Rizqy Ridhallah" 
+          class="profile-img"
+        >
+        <div class="font-pixel" style="font-size: 10px; color: #00e5ff; margin-top: 10px;">
+          ★ CERTIFIED DEEP DIVER &amp; ARTIST ★
+        </div>
+      </div>
+
+      <!-- Deskripsi Profil -->
+      <div>
+        <div class="font-pixel" style="color: #00e5ff; font-size: 12px; margin-bottom: 8px;">
+          ✨ DIVING INTO THE CREATIVE OCEAN
+        </div>
+        <h1 class="font-pixel" style="font-size: 26px; color: #fff; margin-bottom: 12px; line-height: 1.3;">
+          ROBY RIZQY RIDHALLAH
+        </h1>
+        <div class="font-vt" style="font-size: 22px; color: #f59e0b; margin-bottom: 15px;">
+          3D Artist • Graphic Designer • Creative Explorer
+        </div>
+        <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 15px;">
+          Halo! Saya <strong>Roby Rizqy Ridhallah</strong>, seorang creative explorer yang gemar menyelami kedalaman imajinasi visual. Mengolah model 3D di <strong>Blender</strong>, meracik identitas visual di <strong>Adobe Illustrator</strong>, hingga menangkap keheningan momen lewat <strong>fotografi konseptual</strong>.
+        </p>
+        <div style="background: #030d1d; border-left: 4px solid #00e5ff; padding: 12px; font-size: 13px; color: #94a3b8;">
+          Layaknya menjelajahi <em>The Giant Blue Hole</em> di <em>Dave the Diver</em>, saya selalu siap menangkap tantangan visual tersulit dan mengubahnya menjadi karya seni yang menggugah selera!
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Portofolio Kategori -->
+    <div class="tabs-wrapper font-pixel">
+      <button class="tab-btn pixel-btn active" id="tab-3d" onclick="switchTab('3d')">
+        🌊 THE BLUE HOLE (3D ART)
+      </button>
+      <button class="tab-btn pixel-btn" id="tab-photo" onclick="switchTab('photo')">
+        📷 COOKSTA FEED (FOTOGRAFI)
+      </button>
+      <button class="tab-btn pixel-btn" id="tab-graphic" onclick="switchTab('graphic')">
+        🍣 BANCHO'S DESIGN MENU
+      </button>
+    </div>
+
+    <!-- 1. TAB 3D ART (WINO CHARACTER SCULPT) -->
+    <div id="content-3d" class="porto-card">
+      <div class="font-pixel" style="font-size: 10px; color: #f59e0b; margin-bottom: 5px;">
+        ★ KARYA 3D ASLI ROBY RIZQY • BLENDER 5.1.1
+      </div>
+      <h2 class="font-pixel" style="font-size: 18px; color: #fff; margin-bottom: 15px;">
+        Wino - Stylized 3D Character Sculpt
+      </h2>
+      <div class="card-img-wrap">
+        <img 
+          src="https://ais-pre-xv3rjpaayjuphh4nqgbnhs-863584476271.asia-east1.run.app/assets/aistudio/Cuplikan_layar_2026-08-19_185710_562f1186.png" 
+          alt="Wino 3D Character Sculpt Blender 5.1.1"
+        >
+      </div>
+      <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 12px;">
+        Karya digital sculpting karakter 3D orisinal bernama <strong>'Wino'</strong> yang dipahat langsung di Blender 5.1.1 oleh Roby Rizqy Ridhallah. Menampilkan eksplorasi proporsi wajah anime yang manis, rambut helai berlayer dengan aksen gradasi warna hitam ke ungu vibran, serta perbandingan dual viewport (front orthographic sculpt vs lit EEVEE render).
+      </p>
+      <div style="background: #041022; padding: 10px; border: 1px solid #143d6c; font-size: 12px; color: #38bdf8;">
+        <strong>Tools &amp; Fitur:</strong> Blender 5.1.1, Dyntopo Sculpting, EEVEE Next Engine, Vertex Color Shading, Sphere Base Mesh.
+      </div>
+    </div>
+
+    <!-- 2. TAB FOTOGRAFI ASLI ROBY (DSC03096) -->
+    <div id="content-photo" class="porto-card" style="display: none;">
+      <div class="font-pixel" style="font-size: 10px; color: #ec4899; margin-bottom: 5px;">
+        ★ KARYA FOTOGRAFI ASLI ROBY RIZQY • COOKSTA VERIFIED
+      </div>
+      <h2 class="font-pixel" style="font-size: 18px; color: #fff; margin-bottom: 15px;">
+        Senja Hening: Siluet Menara &amp; Guratan Langit Senja
+      </h2>
+      <div class="card-img-wrap" style="border-color: #ec4899; text-align: center;">
+        <img 
+          src="https://ais-pre-xv3rjpaayjuphh4nqgbnhs-863584476271.asia-east1.run.app/assets/aistudio/DSC03096_c95167b0.jpg" 
+          alt="Senja Hening Siluet Menara Masjid DSC03096 by Roby Rizqy Ridhallah"
+          style="max-height: 600px; margin: 0 auto;"
+        >
+      </div>
+      <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 12px;">
+        Karya fotografi orisinal oleh <strong>Roby Rizqy Ridhallah</strong> (file kamera DSC03096). Mengabadikan siluet menara berkubah anggun yang dibingkai dedaunan palem tropis di kedua sisi dengan latar belakang langit senja alami bergradasi jingga, merah muda lembut, dan guratan awan tipis keemasan.
+      </p>
+      <div style="background: #041022; padding: 10px; border: 1px solid #ec4899; font-size: 12px; color: #fbcfe8;">
+        <strong>Konsep &amp; Storytelling:</strong> Natural Twilight Lighting, Visual Storytelling Framing, Atmospheric Depth.
+      </div>
+    </div>
+
+    <!-- 3. TAB BANCHO'S DESIGN MENU -->
+    <div id="content-graphic" class="porto-card" style="display: none; border-color: #f59e0b;">
+      <div class="font-pixel" style="font-size: 10px; color: #f59e0b; margin-bottom: 5px;">
+        ★ LAYANAN DESAIN GRAFIS • ADOBE ILLUSTRATOR
+      </div>
+      <h2 class="font-pixel" style="font-size: 18px; color: #fff; margin-bottom: 15px;">
+        Bancho's Graphic Design Menu
+      </h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px;">
+        <div style="background: #041022; border: 2px solid #f59e0b; padding: 15px;">
+          <h3 class="font-pixel" style="font-size: 13px; color: #f59e0b; margin-bottom: 8px;">🎨 Logo Maker</h3>
+          <p style="font-size: 13px; color: #cbd5e1;">Perancangan logo dan identitas merek berbasis vektor presisi di Adobe Illustrator.</p>
+        </div>
+        <div style="background: #041022; border: 2px solid #00e5ff; padding: 15px;">
+          <h3 class="font-pixel" style="font-size: 13px; color: #00e5ff; margin-bottom: 8px;">📢 Banner Ads</h3>
+          <p style="font-size: 13px; color: #cbd5e1;">Banner promosi komersial dengan hierarki tipografi tegas dan daya tarik tinggi.</p>
+        </div>
+        <div style="background: #041022; border: 2px solid #ec4899; padding: 15px;">
+          <h3 class="font-pixel" style="font-size: 13px; color: #ec4899; margin-bottom: 8px;">📱 Instagram Feed</h3>
+          <p style="font-size: 13px; color: #cbd5e1;">Template feeds 9-grid harmonis untuk media sosial yang terpadu dan profesional.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Kontak -->
+  <div class="footer-box">
+    <div class="font-pixel" style="font-size: 11px; color: #f59e0b; margin-bottom: 8px;">
+      🍣 BANCHO'S NIGHT BAR &amp; SEA DISPATCH
+    </div>
+    <h3 class="font-pixel" style="font-size: 20px; color: #fff; margin-bottom: 10px;">
+      TERTARIK BERKOLABORASI?
+    </h3>
+    <p style="font-size: 14px; color: #94a3b8;">
+      Hubungi Roby untuk komisi karya 3D Blender, desain grafis, atau proyek fotografi.
+    </p>
+    <a href="mailto:robyridhallah38@gmail.com" class="contact-btn font-pixel pixel-btn">
+      ✉️ EMAIL: robyridhallah38@gmail.com
+    </a>
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.getElementById('content-3d').style.display = tabName === '3d' ? 'block' : 'none';
+      document.getElementById('content-photo').style.display = tabName === 'photo' ? 'block' : 'none';
+      document.getElementById('content-graphic').style.display = tabName === 'graphic' ? 'block' : 'none';
+
+      document.getElementById('tab-3d').className = 'tab-btn pixel-btn ' + (tabName === '3d' ? 'active' : '');
+      document.getElementById('tab-photo').className = 'tab-btn pixel-btn ' + (tabName === 'photo' ? 'active' : '');
+      document.getElementById('tab-graphic').className = 'tab-btn pixel-btn ' + (tabName === 'graphic' ? 'active' : '');
+    }
+  </script>
+</body>
+</html>`;
+
+  const handleCopy = () => {
+    sound.playDing();
+    navigator.clipboard.writeText(embedCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="google-sites-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#051329] border-4 border-[#f59e0b] w-full max-w-3xl max-h-[90vh] flex flex-col shadow-[0_0_35px_rgba(245,158,11,0.4)]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Modal Header */}
+        <div className="bg-[#030d1d] border-b-2 border-[#f59e0b] px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 font-pixel text-xs text-[#f59e0b]">
+            <Code2 size={16} />
+            <span id="google-sites-modal-title">KODE SEMATAN GOOGLE SITES (EMBED HTML)</span>
+          </div>
+          <button
+            onClick={() => {
+              sound.playBubble();
+              onClose();
+            }}
+            aria-label="Tutup jendela kode"
+            className="p-1 text-[#94a3b8] hover:text-white border border-[#1b3d66]"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Modal Body */}
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-4">
+          <div className="bg-[#092218] border-2 border-[#10b981] p-3 text-xs font-sans-modern text-[#a7f3d0]">
+            <strong className="text-white block font-pixel text-[11px] mb-1">
+              Cara Memasang di Google Sites:
+            </strong>
+            <ol className="list-decimal list-inside space-y-1">
+              <li>Klik tombol <strong>"Salin Semua Kode HTML"</strong> di bawah ini.</li>
+              <li>Buka halaman editor <strong>Google Sites</strong> Anda.</li>
+              <li>Di panel kanan, klik <strong>Sisipkan (Insert)</strong> lalu pilih <strong>Sematkan (Embed)</strong>.</li>
+              <li>Pilih tab <strong>Sematkan Kode (Embed Code)</strong>, lalu tempelkan (Ctrl+V) kode ini.</li>
+              <li>Klik <strong>Berikutnya (Next)</strong> lalu <strong>Sisipkan (Insert)</strong>. Atur ukuran kotak sesuai selera Anda!</li>
+            </ol>
+          </div>
+
+          {/* Copy Button */}
+          <div className="flex items-center justify-between">
+            <span className="font-pixel text-[10px] text-[#8ec8f8]">
+              FILE LENGKAP: HTML + CSS INLINE + JAVASCRIPT (SINGLE-FILE)
+            </span>
+            <button
+              onClick={handleCopy}
+              className={`px-4 py-2 font-pixel text-xs border-2 border-black pixel-btn flex items-center gap-2 ${
+                copied ? 'bg-[#10b981] text-white' : 'bg-[#f59e0b] text-[#051329]'
+              }`}
+            >
+              {copied ? <Check size={14} /> : <Copy size={14} />}
+              <span>{copied ? 'KODE BERHASIL DISALIN!' : 'SALIN SEMUA KODE HTML'}</span>
+            </button>
+          </div>
+
+          {/* Code Preview Box */}
+          <pre className="p-3 bg-[#020712] border-2 border-[#153459] text-[11px] font-mono text-[#38bdf8] h-64 overflow-y-auto leading-relaxed select-all">
+            <code>{embedCode}</code>
+          </pre>
+        </div>
+      </div>
+    </div>
+  );
+};
